@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Board from './components/Board';
-import Reload from './components/Reload';
+import Status from './components/Status';
 import { calculateWinner } from './helpers';
 
 import './styles/root.scss';
@@ -8,13 +8,7 @@ import './styles/root.scss';
 const App = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(false);
-  const [count, setCount] = useState(0);
-  const winner = calculateWinner(board);
-  const message = winner
-    ? `Winner is ${winner}`
-    : count < 9
-    ? `Next player is ${isXNext ? 'X' : 'O'}`
-    : 'Game Over, Click Replay to Play Again';
+  const { winner, winningSquares } = calculateWinner(board);
 
   const handleSquareClick = position => {
     if (board[position] || winner) {
@@ -30,16 +24,33 @@ const App = () => {
         return square;
       });
     });
-    setCount(prev => prev + 1);
+
     setIsXNext(prev => !prev);
+  };
+
+  const newGame = () => {
+    setBoard(Array(9).fill(null));
+    setIsXNext(false);
   };
 
   return (
     <div className="app">
-      <h1>TIC TAC TOE</h1>
-      <h2>{message}</h2>
-      <Board board={board} handleSquareClick={handleSquareClick} />
-      <Reload />
+      <h1>
+        TIC <span className="text-green">TAC</span> TOE
+      </h1>
+      <Status winner={winner} board={board} isXnext={isXNext} />
+      <Board
+        board={board}
+        handleSquareClick={handleSquareClick}
+        winningSquares={winningSquares}
+      />
+      <button
+        type="button"
+        className={`btn-reset ${winner ? 'active' : ''}`}
+        onClick={newGame}
+      >
+        New Game
+      </button>
     </div>
   );
 };
