@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Board from './components/Board';
-import History from './components/History';
+import Reload from './components/Reload';
 import { calculateWinner } from './helpers';
 
 import './styles/root.scss';
@@ -8,11 +8,13 @@ import './styles/root.scss';
 const App = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(false);
-  // const initBoard = Array(9).fill(null);
+  const [count, setCount] = useState(0);
   const winner = calculateWinner(board);
   const message = winner
     ? `Winner is ${winner}`
-    : `Next player is ${isXNext ? 'X' : 'O'}`;
+    : count < 9
+    ? `Next player is ${isXNext ? 'X' : 'O'}`
+    : 'Game Over, Click Replay to Play Again';
 
   const handleSquareClick = position => {
     if (board[position] || winner) {
@@ -28,7 +30,7 @@ const App = () => {
         return square;
       });
     });
-
+    setCount(prev => prev + 1);
     setIsXNext(prev => !prev);
   };
 
@@ -37,6 +39,7 @@ const App = () => {
       <h1>TIC TAC TOE</h1>
       <h2>{message}</h2>
       <Board board={board} handleSquareClick={handleSquareClick} />
+      <Reload />
     </div>
   );
 };
