@@ -11,3 +11,8 @@ Use `npm run start` command to run the project
 ## Deployment
 
 Deployed the project at `http://automatic-butter.surge.sh/`
+
+
+## TicTacToe Preview
+
+![Screenshot](tictactoe.png)
